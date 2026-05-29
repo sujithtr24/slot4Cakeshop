@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SweetCake Admin - Dashboard</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{% static 'css/admin/common.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin/add-product.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin/customers.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin/products.css' %}">
+    {% block style %}
+
+    {% endblock %}
+</head>
+<body>
+
+    <!-- Sidebar Overlay for mobile screen -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="admin-wrapper">
+        <!-- Sidebar Start -->
+        <div class="sidebar" id="adminSidebar">
+            <div class="sidebar-brand">
+                <i class="bi bi-cake2-fill"></i> Sweet<span>Cake</span>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li class="menu-item active">
+                    <a href="{% url 'adminHome' %}" class="menu-link">
+                        <i class="bi bi-grid-1x2-fill"></i> Dashboard
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'adminCustomers' %}" class="menu-link">
+                        <i class="bi bi-people-fill"></i> Customers
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'adminProducts' %}" class="menu-link">
+                        <i class="bi bi-box-seam-fill"></i> Products
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'adminAddProducts' %}" class="menu-link">
+                        <i class="bi bi-plus-circle-fill"></i> Add Product
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="admin-avatar">A</div>
+                <div class="admin-info">
+                    <h6>SweetCake Admin</h6>
+                    <span>System Manager</span>
+                </div>
+            </div>
+        </div>
+        <!-- Sidebar End -->
+
+        <div class="main-content">
+            <!-- Header Start -->
+            <div class="admin-header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <div class="header-title">
+                        <h2>Dashboard</h2>
+                        <p>Welcome back, Admin! Here is your business overview.</p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <a href="../index.html" class="btn-visit-site">
+                        <i class="bi bi-globe"></i> Visit Site
+                    </a>
+                    <a href="../login.html" class="btn-logout-admin">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </a>
+                </div>
+            </div>
+            <!-- Header End -->
+
+            {% block content %}
+
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>

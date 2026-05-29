@@ -1,0 +1,86 @@
+{% extends 'admin/admin-base.html' %}
+
+{% block content %}
+<!-- Customers Table Card Start -->
+            <div class="customers-card">
+                <div class="table-header-toolbar">
+                    <div class="table-search">
+                        <i class="bi bi-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search customers by name, email...">
+                    </div>
+                    <div class="text-secondary fw-bold" id="customerCount">
+                        Showing 5 Customers
+                    </div>
+                </div>
+
+                <div class="table-responsive-custom">
+                    <table class="table table-custom" id="customersTable">
+                        <thead>
+                            <tr>
+                                <th>Customer ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Joined Date</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr class="customer-row" id="row-{{ user.id }}">
+                                <td class="fw-bold">{{ user.id }}</td>
+                                <td class="customer-name">{{ user.customer_name }}</td>
+                                <td class="customer-email">{{ user.customer_email }}</td>
+                                <td class="customer-phone">{{ user.customer_phone }}</td>
+                                <td>15 Jan 2026</td>
+                                <td>
+                                    <div class="action-buttons justify-content-end">
+                                        <a href="{% url 'adminEditCustomer' user.id %}" class="btn-action btn-action-edit text-decoration-none" title="Edit Details">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        <a href="{% url 'adminDeleteCustomer' user.id %}" class="btn-action btn-action-delete text-decoration-none" title="Delete Customer">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Customers Table Card End -->
+
+
+    <!-- Edit Customer Modal Start -->
+    <div class="admin-modal" id="editCustomerModal">
+        <div class="modal-content-box">
+            <div class="modal-header-custom">
+                <h5>Edit Customer Details</h5>
+                <button class="btn-close-modal" id="closeModalBtn">&times;</button>
+            </div>
+            <form id="editCustomerForm">
+                <input type="hidden" id="editCustomerId">
+                <div class="modal-body-custom">
+                    <div class="form-group-custom">
+                        <label for="editCustomerName">Full Name</label>
+                        <input type="text" class="form-input-custom" id="editCustomerName" required>
+                    </div>
+                    <div class="form-group-custom">
+                        <label for="editCustomerEmail">Email Address</label>
+                        <input type="email" class="form-input-custom" id="editCustomerEmail" required>
+                    </div>
+                    <div class="form-group-custom">
+                        <label for="editCustomerPhone">Phone Number</label>
+                        <input type="text" class="form-input-custom" id="editCustomerPhone" required>
+                    </div>
+                </div>
+                <div class="modal-footer-custom">
+                    <button type="button" class="btn-modal-cancel" id="cancelModalBtn">Cancel</button>
+                    <button type="submit" class="btn-modal-save">Save Changes</button>
+                </div>
+            </form>
+        </div>
+
+{% endblock %}
