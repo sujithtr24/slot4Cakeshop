@@ -2,19 +2,21 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>SweetCake - Shopping Cart</title>
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
+
 <body>
 
     <!-- Navbar Start -->
@@ -48,8 +50,6 @@
                         <a class="nav-link" href="#">Gallery</a>
                     </li>
 
-                    {% if request.session.user_id %}
-
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'products' %}">Products</a>
                     </li>
@@ -61,11 +61,11 @@
                     </li>
 
                     <a href="{% url 'logout' %}">
-                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
-                        <button class="login-btn" >
-                            Logout
-                        </button>
-                    </li>
+                        <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                            <button class="login-btn">
+                                Logout
+                            </button>
+                        </li>
                     </a>
 
                     <!-- Cart Icon -->
@@ -77,15 +77,6 @@
                             </span>
                         </a>
                     </li>
-                    {% else %}
-
-                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
-                        <a href="{% url 'login' %}"><button class="login-btn" >
-                            Login
-                        </button></a>
-                    </li>
-
-                    {% endif %}
 
                 </ul>
 
@@ -120,12 +111,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Mockup Product 1 -->
-                                <tr class="cart-item-row" data-item-id="1" data-price="650">
+                                <tr class="cart-item-row" data-item-id="1" data-price="850">
                                     <!-- Image & Name -->
                                     <td>
                                         <div class="d-flex align-items-center gap-3">
-                                            <div class="cart-item-img d-flex align-items-center justify-content-center bg-light text-secondary">
+                                            <div
+                                                class="cart-item-img d-flex align-items-center justify-content-center bg-light text-secondary">
                                                 <i class="bi bi-cake2 fs-3"></i>
                                             </div>
                                             <div>
@@ -136,19 +127,21 @@
                                     </td>
                                     <!-- Price -->
                                     <td>
-                                        <span class="cart-item-price">₹650</span>
+                                        <span class="cart-item-price">₹850</span>
                                     </td>
                                     <!-- Quantity Controller -->
                                     <td>
                                         <div class="quantity-controller">
-                                            <button type="button" class="btn-quantity btn-decrement" onclick="updateQty(1, -1)">-</button>
-                                            <span class="quantity-val" id="qty-1">2</span>
-                                            <button type="button" class="btn-quantity btn-increment" onclick="updateQty(1, 1)">+</button>
+                                            <button type="button" class="btn-quantity btn-decrement"
+                                                onclick="updateQty(1, -1)">-</button>
+                                            <span class="quantity-val" id="qty-1">1</span>
+                                            <button type="button" class="btn-quantity btn-increment"
+                                                onclick="updateQty(1, 1)">+</button>
                                         </div>
                                     </td>
                                     <!-- Subtotal -->
                                     <td>
-                                        <span class="cart-item-subtotal" id="subtotal-1">₹1300</span>
+                                        <span class="cart-item-subtotal" id="subtotal-1">₹850</span>
                                     </td>
                                     <!-- Remove Button -->
                                     <td>
@@ -158,35 +151,37 @@
                                     </td>
                                 </tr>
                                 
-                                <!-- Mockup Product 2 -->
-                                <tr class="cart-item-row" data-item-id="2" data-price="450">
+                                <tr class="cart-item-row" data-item-id="2" data-price="900">
                                     <!-- Image & Name -->
                                     <td>
                                         <div class="d-flex align-items-center gap-3">
-                                            <div class="cart-item-img d-flex align-items-center justify-content-center bg-light text-secondary">
+                                            <div
+                                                class="cart-item-img d-flex align-items-center justify-content-center bg-light text-secondary">
                                                 <i class="bi bi-cake2 fs-3"></i>
                                             </div>
                                             <div>
-                                                <h5 class="cart-item-name">Classic Vanilla Cake</h5>
-                                                <span class="cart-item-category">vanila</span>
+                                                <h5 class="cart-item-name">Red Velvet Cake</h5>
+                                                <span class="cart-item-category">others</span>
                                             </div>
                                         </div>
                                     </td>
                                     <!-- Price -->
                                     <td>
-                                        <span class="cart-item-price">₹450</span>
+                                        <span class="cart-item-price">₹900</span>
                                     </td>
                                     <!-- Quantity Controller -->
                                     <td>
                                         <div class="quantity-controller">
-                                            <button type="button" class="btn-quantity btn-decrement" onclick="updateQty(2, -1)">-</button>
+                                            <button type="button" class="btn-quantity btn-decrement"
+                                                onclick="updateQty(2, -1)">-</button>
                                             <span class="quantity-val" id="qty-2">1</span>
-                                            <button type="button" class="btn-quantity btn-increment" onclick="updateQty(2, 1)">+</button>
+                                            <button type="button" class="btn-quantity btn-increment"
+                                                onclick="updateQty(2, 1)">+</button>
                                         </div>
                                     </td>
                                     <!-- Subtotal -->
                                     <td>
-                                        <span class="cart-item-subtotal" id="subtotal-2">₹450</span>
+                                        <span class="cart-item-subtotal" id="subtotal-2">₹900</span>
                                     </td>
                                     <!-- Remove Button -->
                                     <td>
@@ -316,64 +311,70 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Dynamic Cart Simulator Script -->
     <script>
         function updateQty(itemId, change) {
-            const qtyElement = document.getElementById(`qty-${itemId}`);
-            const rowElement = qtyElement.closest('.cart-item-row');
-            const price = parseFloat(rowElement.getAttribute('data-price'));
-            
-            let currentQty = parseInt(qtyElement.innerText);
-            let newQty = currentQty + change;
-            
-            if (newQty < 1) return; // Don't allow qty < 1
-            
-            // Update quantity display
-            qtyElement.innerText = newQty;
-            
-            // Update item subtotal
-            const subtotalElement = document.getElementById(`subtotal-${itemId}`);
-            const itemSubtotal = price * newQty;
-            subtotalElement.innerText = `₹${itemSubtotal}`;
-            
-            recalculateTotal();
-        }
-        
-        function removeItem(itemId) {
-            const qtyElement = document.getElementById(`qty-${itemId}`);
-            const rowElement = qtyElement.closest('.cart-item-row');
-            rowElement.remove();
-            
-            // Recalculate everything
-            recalculateTotal();
-            
-            // Check if cart is now empty
-            const rows = document.querySelectorAll('.cart-item-row');
-            if (rows.length === 0) {
-                document.getElementById('cart-content-row').classList.add('d-none');
-                document.getElementById('empty-cart-container').classList.remove('d-none');
+            const qtyEl = document.getElementById('qty-' + itemId);
+            if (!qtyEl) return;
+            let qty = parseInt(qtyEl.innerText);
+            qty += change;
+            if (qty < 1) qty = 1;
+            qtyEl.innerText = qty;
+
+            const row = document.querySelector(`.cart-item-row[data-item-id="${itemId}"]`);
+            if (row) {
+                const price = parseFloat(row.getAttribute('data-price'));
+                const subtotalEl = document.getElementById('subtotal-' + itemId);
+                if (subtotalEl) {
+                    subtotalEl.innerText = '₹' + (price * qty);
+                }
             }
+            updateCartSummary();
         }
-        
-        function recalculateTotal() {
-            const rows = document.querySelectorAll('.cart-item-row');
+
+        function removeItem(itemId) {
+            const row = document.querySelector(`.cart-item-row[data-item-id="${itemId}"]`);
+            if (row) {
+                row.remove();
+            }
+            updateCartSummary();
+        }
+
+        function updateCartSummary() {
             let total = 0;
             let totalQty = 0;
+            const rows = document.querySelectorAll('.cart-item-row');
             
-            rows.forEach(row => {
-                const price = parseFloat(row.getAttribute('data-price'));
-                const qty = parseInt(row.querySelector('.quantity-val').innerText);
+            rows.forEach(r => {
+                const price = parseFloat(r.getAttribute('data-price'));
+                const qty = parseInt(r.querySelector('.quantity-val').innerText);
                 total += price * qty;
-                totalQty += 1; // count unique item kinds
+                totalQty += qty;
             });
-            
-            // Update summary UI
-            document.getElementById('summary-subtotal').innerText = `₹${total}`;
-            document.getElementById('summary-total').innerText = `₹${total}`;
-            
-            // Update navbar badge
-            document.getElementById('navbar-cart-badge').innerText = totalQty;
+
+            const subtotalEl = document.getElementById('summary-subtotal');
+            const totalEl = document.getElementById('summary-total');
+            const badgeEl = document.getElementById('navbar-cart-badge');
+
+            if (subtotalEl) subtotalEl.innerText = '₹' + total;
+            if (totalEl) totalEl.innerText = '₹' + total;
+            if (badgeEl) badgeEl.innerText = totalQty;
+
+            if (rows.length === 0) {
+                const cartRow = document.getElementById('cart-content-row');
+                const emptyContainer = document.getElementById('empty-cart-container');
+                if (cartRow) cartRow.classList.add('d-none');
+                if (emptyContainer) emptyContainer.classList.remove('d-none');
+            } else {
+                const cartRow = document.getElementById('cart-content-row');
+                const emptyContainer = document.getElementById('empty-cart-container');
+                if (cartRow) cartRow.classList.remove('d-none');
+                if (emptyContainer) emptyContainer.classList.add('d-none');
+            }
         }
+
+        // Run updateCartSummary on load to compute initial totals dynamically
+        document.addEventListener('DOMContentLoaded', updateCartSummary);
     </script>
 </body>
+
 </html>

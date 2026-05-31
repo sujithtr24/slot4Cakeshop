@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import *
 from adminapp.models import cake_tbl
 
@@ -77,4 +77,49 @@ def products(request):
 def cart(request):
     if 'user_id' not in request.session:
         return redirect('login')
-    return render(request, 'cart.html')
+    
+    customer = customer_tbl.objects.get(id=request.session['user_id'])
+    cart_obj = cart_tbl.objects.filter(customer=customer)
+    return render(request, 'cart.html', {'cart_obj': cart_obj})
+
+def add_to_cart(request, cake_id):
+    if 'user_id' not in request.session:
+        return redirect('login')
+    
+    customer = customer_tbl.objects.get(id=request.session['user_id'])
+    cake = cake_tbl.objects.get(id=cake_id)
+    
+    # Check if item already exists in the cart for this customer
+    cart_item, created = cart_tbl.objects.get_or_create(customer=customer, cake=cake)
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+        
+    return redirect('cart')
+
+def update_cart_qty(request, cart_id):
+    if 'user_id' not in request.session:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+    
+    try:
+        cart_item = cart_tbl.objects.get(id=cart_id, customer__id=request.session['user_id'])
+        action = request.GET.get('action')
+        if action == 'increment':
+            cart_item.quantity += 1
+        elif action == 'decrement' and cart_item.quantity > 1:
+            cart_item.quantity -= 1
+        cart_item.save()
+        return JsonResponse({'success': True, 'quantity': cart_item.quantity})
+    except cart_tbl.DoesNotExist:
+        return JsonResponse({'error': 'Not found'}, status=404)
+
+def remove_cart_item(request, cart_id):
+    if 'user_id' not in request.session:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+        
+    try:
+        cart_item = cart_tbl.objects.get(id=cart_id, customer__id=request.session['user_id'])
+        cart_item.delete()
+        return JsonResponse({'success': True})
+    except cart_tbl.DoesNotExist:
+        return JsonResponse({'error': 'Not found'}, status=404)

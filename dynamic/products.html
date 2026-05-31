@@ -133,7 +133,7 @@
                             <!-- Action Row -->
                             <div class="product-action-row">
                                 <span class="product-price">₹{{ cake.cake_price }}</span>
-                                <a href="#" class="btn-add-cart">
+                                <a href="{% url 'addto-cart' cake.id %}" class="btn-add-cart">
                                     <i class="bi bi-cart-plus"></i> Add to Cart
                                 </a>
                             </div>

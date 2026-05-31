@@ -1,4 +1,5 @@
 from django.db import models
+from adminapp.models import cake_tbl
 
 # Create your models here.
 class customer_tbl(models.Model):
@@ -6,3 +7,8 @@ class customer_tbl(models.Model):
     customer_email = models.EmailField()
     customer_phone = models.PositiveIntegerField()
     customer_password = models.CharField(max_length=20)
+
+class cart_tbl(models.Model):
+    customer = models.ForeignKey(customer_tbl, on_delete=models.CASCADE)
+    cake = models.ForeignKey(cake_tbl, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
