@@ -74,13 +74,6 @@ def products(request):
     cakes = cake_tbl.objects.all()
     return render(request, 'products.html', {'cakes': cakes})
 
-def cart(request):
-    if 'user_id' not in request.session:
-        return redirect('login')
-    
-    customer = customer_tbl.objects.get(id=request.session['user_id'])
-    cart_obj = cart_tbl.objects.filter(customer=customer)
-    return render(request, 'cart.html', {'cart_obj': cart_obj})
 
 def add_to_cart(request, cake_id):
     if 'user_id' not in request.session:
@@ -95,31 +88,50 @@ def add_to_cart(request, cake_id):
         cart_item.quantity += 1
         cart_item.save()
         
-    return redirect('cart')
+    return redirect('products')
 
-def update_cart_qty(request, cart_id):
+def increment_cart(request, cart_id):
     if 'user_id' not in request.session:
-        return JsonResponse({'error': 'Unauthorized'}, status=401)
-    
+        return redirect('login')
     try:
         cart_item = cart_tbl.objects.get(id=cart_id, customer__id=request.session['user_id'])
-        action = request.GET.get('action')
-        if action == 'increment':
-            cart_item.quantity += 1
-        elif action == 'decrement' and cart_item.quantity > 1:
-            cart_item.quantity -= 1
+        cart_item.quantity += 1
         cart_item.save()
-        return JsonResponse({'success': True, 'quantity': cart_item.quantity})
     except cart_tbl.DoesNotExist:
-        return JsonResponse({'error': 'Not found'}, status=404)
+        pass
+    return redirect('cart')
+
+def decrement_cart(request, cart_id):
+    if 'user_id' not in request.session:
+        return redirect('login')
+    try:
+        cart_item = cart_tbl.objects.get(id=cart_id, customer__id=request.session['user_id'])
+        if cart_item.quantity > 1:
+            cart_item.quantity -= 1
+            cart_item.save()
+    except cart_tbl.DoesNotExist:
+        pass
+    return redirect('cart')
 
 def remove_cart_item(request, cart_id):
     if 'user_id' not in request.session:
-        return JsonResponse({'error': 'Unauthorized'}, status=401)
+        return redirect('login')
         
     try:
         cart_item = cart_tbl.objects.get(id=cart_id, customer__id=request.session['user_id'])
         cart_item.delete()
-        return JsonResponse({'success': True})
     except cart_tbl.DoesNotExist:
-        return JsonResponse({'error': 'Not found'}, status=404)
+        pass
+    return redirect('cart')
+    
+
+def cart(request):
+    if 'user_id' not in request.session:
+        return redirect('login')
+    
+    customer = customer_tbl.objects.get(id=request.session['user_id'])
+    cart_obj = cart_tbl.objects.filter(customer=customer)
+
+    grand_total = sum(item.total_amount() for item in cart_obj)
+    cart_count = sum(item.quantity for item in cart_obj)
+    return render(request, 'cart.html', {'cart_obj': cart_obj, "grand_total": grand_total, "cart_count": cart_count})

@@ -73,7 +73,7 @@
                         <a href="{% url 'cart' %}" class="cart-icon" style="background: #ff4d6d;">
                             <i class="bi bi-cart3" style="color: white;"></i>
                             <span class="cart-badge" id="navbar-cart-badge">
-                                2
+                                {{ cart_count|default:0 }}
                             </span>
                         </a>
                     </li>
@@ -95,6 +95,7 @@
                 <h1 class="cart-main-title">Shopping Cart</h1>
             </div>
 
+            {% if cart_obj %}
             <!-- Cart Content -->
             <div class="row g-4" id="cart-content-row">
                 <!-- Cart Items Column -->
@@ -111,85 +112,50 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="cart-item-row" data-item-id="1" data-price="850">
+                                {% for cart in cart_obj %}
+                                <tr class="cart-item-row" data-item-id="{{ cart.id }}" data-price="{{ cart.cake.cake_price }}">
                                     <!-- Image & Name -->
                                     <td>
                                         <div class="d-flex align-items-center gap-3">
-                                            <div
-                                                class="cart-item-img d-flex align-items-center justify-content-center bg-light text-secondary">
+                                            {% if cart.cake.cake_image %}
+                                            <img src="{{ cart.cake.cake_image.url }}" alt="{{ cart.cake.cake_name }}" class="cart-item-img">
+                                            {% else %}
+                                            <div class="cart-item-img d-flex align-items-center justify-content-center bg-light text-secondary">
                                                 <i class="bi bi-cake2 fs-3"></i>
                                             </div>
+                                            {% endif %}
                                             <div>
-                                                <h5 class="cart-item-name">Chocolate Truffle Cake</h5>
-                                                <span class="cart-item-category">chocolate</span>
+                                                <h5 class="cart-item-name">{{ cart.cake.cake_name }}</h5>
+                                                <span class="cart-item-category">{{ cart.cake.cake_category }}</span>
                                             </div>
                                         </div>
                                     </td>
                                     <!-- Price -->
                                     <td>
-                                        <span class="cart-item-price">₹850</span>
+                                        <span class="cart-item-price">₹{{ cart.cake.cake_price }}</span>
                                     </td>
                                     <!-- Quantity Controller -->
                                     <td>
                                         <div class="quantity-controller">
-                                            <button type="button" class="btn-quantity btn-decrement"
-                                                onclick="updateQty(1, -1)">-</button>
-                                            <span class="quantity-val" id="qty-1">1</span>
-                                            <button type="button" class="btn-quantity btn-increment"
-                                                onclick="updateQty(1, 1)">+</button>
+                                            <a href="{% url 'decrement-cart' cart.id %}" class="btn-quantity btn-decrement" style="text-decoration: none;">-</a>
+                                            <span class="quantity-val">{{ cart.quantity }}</span>
+                                            <a href="{% url 'increment-cart' cart.id %}" class="btn-quantity btn-increment" style="text-decoration: none;">+</a>
                                         </div>
                                     </td>
                                     <!-- Subtotal -->
                                     <td>
-                                        <span class="cart-item-subtotal" id="subtotal-1">₹850</span>
+                                        <span class="cart-item-subtotal">₹{{ cart.total_amount }}</span>
                                     </td>
                                     <!-- Remove Button -->
                                     <td>
-                                        <button type="button" class="btn-remove-item" onclick="removeItem(1)">
+                                        <a href="{% url 'remove-cart-item' cart.id %}" class="btn-remove-item">
                                             <i class="bi bi-trash3-fill"></i>
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
+                                {% endfor %}
                                 
-                                <tr class="cart-item-row" data-item-id="2" data-price="900">
-                                    <!-- Image & Name -->
-                                    <td>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div
-                                                class="cart-item-img d-flex align-items-center justify-content-center bg-light text-secondary">
-                                                <i class="bi bi-cake2 fs-3"></i>
-                                            </div>
-                                            <div>
-                                                <h5 class="cart-item-name">Red Velvet Cake</h5>
-                                                <span class="cart-item-category">others</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <!-- Price -->
-                                    <td>
-                                        <span class="cart-item-price">₹900</span>
-                                    </td>
-                                    <!-- Quantity Controller -->
-                                    <td>
-                                        <div class="quantity-controller">
-                                            <button type="button" class="btn-quantity btn-decrement"
-                                                onclick="updateQty(2, -1)">-</button>
-                                            <span class="quantity-val" id="qty-2">1</span>
-                                            <button type="button" class="btn-quantity btn-increment"
-                                                onclick="updateQty(2, 1)">+</button>
-                                        </div>
-                                    </td>
-                                    <!-- Subtotal -->
-                                    <td>
-                                        <span class="cart-item-subtotal" id="subtotal-2">₹900</span>
-                                    </td>
-                                    <!-- Remove Button -->
-                                    <td>
-                                        <button type="button" class="btn-remove-item" onclick="removeItem(2)">
-                                            <i class="bi bi-trash3-fill"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                
                             </tbody>
                         </table>
                     </div>
@@ -201,7 +167,7 @@
                         <h4 class="summary-title">Order Summary</h4>
                         <div class="summary-row">
                             <span>Subtotal</span>
-                            <span id="summary-subtotal">₹1750</span>
+                            <span id="summary-subtotal">₹{{ grand_total }}</span>
                         </div>
                         <div class="summary-row">
                             <span>Estimated Delivery</span>
@@ -209,7 +175,7 @@
                         </div>
                         <div class="summary-row total-row">
                             <span>Total Amount</span>
-                            <span class="total-amount" id="summary-total">₹1750</span>
+                            <span class="total-amount" id="summary-total">₹{{ grand_total }}</span>
                         </div>
                         <a href="#" class="btn-checkout">
                             <i class="bi bi-credit-card-fill"></i> Proceed to Checkout
@@ -220,9 +186,9 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Empty Cart Section (hidden by default unless cart is empty) -->
-            <div class="row text-center py-5 d-none" id="empty-cart-container">
+            {% else %}
+            <!-- Empty Cart Section -->
+            <div class="row text-center py-5" id="empty-cart-container">
                 <div class="col-12">
                     <div class="text-muted">
                         <i class="bi bi-cart-x fs-1 text-secondary mb-3 d-block"></i>
@@ -234,6 +200,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
         </div>
     </section>
     <!-- Cart Section End -->
@@ -310,71 +277,6 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        function updateQty(itemId, change) {
-            const qtyEl = document.getElementById('qty-' + itemId);
-            if (!qtyEl) return;
-            let qty = parseInt(qtyEl.innerText);
-            qty += change;
-            if (qty < 1) qty = 1;
-            qtyEl.innerText = qty;
-
-            const row = document.querySelector(`.cart-item-row[data-item-id="${itemId}"]`);
-            if (row) {
-                const price = parseFloat(row.getAttribute('data-price'));
-                const subtotalEl = document.getElementById('subtotal-' + itemId);
-                if (subtotalEl) {
-                    subtotalEl.innerText = '₹' + (price * qty);
-                }
-            }
-            updateCartSummary();
-        }
-
-        function removeItem(itemId) {
-            const row = document.querySelector(`.cart-item-row[data-item-id="${itemId}"]`);
-            if (row) {
-                row.remove();
-            }
-            updateCartSummary();
-        }
-
-        function updateCartSummary() {
-            let total = 0;
-            let totalQty = 0;
-            const rows = document.querySelectorAll('.cart-item-row');
-            
-            rows.forEach(r => {
-                const price = parseFloat(r.getAttribute('data-price'));
-                const qty = parseInt(r.querySelector('.quantity-val').innerText);
-                total += price * qty;
-                totalQty += qty;
-            });
-
-            const subtotalEl = document.getElementById('summary-subtotal');
-            const totalEl = document.getElementById('summary-total');
-            const badgeEl = document.getElementById('navbar-cart-badge');
-
-            if (subtotalEl) subtotalEl.innerText = '₹' + total;
-            if (totalEl) totalEl.innerText = '₹' + total;
-            if (badgeEl) badgeEl.innerText = totalQty;
-
-            if (rows.length === 0) {
-                const cartRow = document.getElementById('cart-content-row');
-                const emptyContainer = document.getElementById('empty-cart-container');
-                if (cartRow) cartRow.classList.add('d-none');
-                if (emptyContainer) emptyContainer.classList.remove('d-none');
-            } else {
-                const cartRow = document.getElementById('cart-content-row');
-                const emptyContainer = document.getElementById('empty-cart-container');
-                if (cartRow) cartRow.classList.remove('d-none');
-                if (emptyContainer) emptyContainer.classList.add('d-none');
-            }
-        }
-
-        // Run updateCartSummary on load to compute initial totals dynamically
-        document.addEventListener('DOMContentLoaded', updateCartSummary);
-    </script>
 </body>
 
 </html>
